@@ -1,30 +1,47 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import ProductCard from './components/ProductCard.vue';
+import { ref } from 'vue';
+
+const products = ref(null);
+
+fetch('https://fakestoreapi.com/products')
+    .then(response => response.json())
+    .then(data => products.value = data);
+
+console.log(products);
 </script>
 
 <template>
   <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+    <h1>Каталог</h1>
+    <ul class="products__list">
+      <ProductCard
+        v-for="product in products"
+        :key="product.id"
+        :category="product.category"
+        :description="product.description"
+        :image="product.image"
+        :price="product.price"
+        :rating="product.rating"
+        :title="product.title"
+      />
+    </ul>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<style scoped lang="scss">
+@import "./style.scss";
+
+.products {
+
+  &__list {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    height: auto;
+    gap: 8px
+  }
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+
 </style>
